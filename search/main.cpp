@@ -2,6 +2,7 @@
 
 #include "hyper_graph.h"
 #include "random_hyper_graph_family.h"
+#include "message_queue.h"
 
 int main() {
     RandomHyperGraphFamily family({3}, {1});
