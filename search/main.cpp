@@ -3,7 +3,6 @@
 
 
 int main() {
-    std::default_random_engine rng;
-    HyperGraph g(3, 10000, 0.9, rng);
-    std::cout << g.peelable() << std::endl;
+    RandomHyperGraphFamily family({3}, {1});
+    std::cout << family.sample(100000, 0.9).is_core_empty() << std::endl;
 }
