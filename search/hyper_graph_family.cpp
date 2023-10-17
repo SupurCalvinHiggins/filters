@@ -1,9 +1,9 @@
 #include <cassert>
 #include <random>
 
-#include "random_hyper_graph_family.h"
+#include "hyper_graph_family.h"
 
-RandomHyperGraphFamily::RandomHyperGraphFamily(
+HyperGraphFamily::HyperGraphFamily(
     std::vector<uint32_t> &&edge_sizes,
     std::vector<uint32_t> &&edge_weights
 ) : edge_sizes_(edge_sizes), edge_weights_(edge_weights) {
@@ -12,7 +12,7 @@ RandomHyperGraphFamily::RandomHyperGraphFamily(
     assert(edge_sizes_.size() == edge_weights_.size());
 }
 
-HyperGraph RandomHyperGraphFamily::sample(uint32_t edge_count, double load_factor)
+HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor)
 {
     assert(edge_count > 0);
     assert(load_factor < 1);
