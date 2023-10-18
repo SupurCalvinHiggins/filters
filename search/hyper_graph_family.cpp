@@ -39,16 +39,14 @@ HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor)
 }
 
 // epsilon = 1e-6 = 0.000006 etc.
-float HyperGraphFamily::binary_search(double epsilon) {
-    float left = 0.0;
-    float right = 1.0;
+float HyperGraphFamily::threshold(uint32_t edge_count, double left, double right, double epsilon) {
 
     // floating point precision fix
     while (right-left > epsilon) {
         float mid = left + (right - left) / 2;
 
         // if no we can move left up
-        if (sample(100000, mid).is_core_empty()) {
+        if (sample(edge_count, mid).is_core_empty()) {
             left = mid;
         }
         // otherwise if yes we can move right down

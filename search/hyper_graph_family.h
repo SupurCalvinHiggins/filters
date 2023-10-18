@@ -15,5 +15,5 @@ public:
 
     HyperGraph sample(uint32_t edge_count, double load_factor);
 
-    float binary_search(double epsilon);
+    float threshold(uint32_t edge_count, double left = 0.0, double right = 1.0, double epsilon = 0.0001);
 };
