@@ -38,27 +38,26 @@ void test_hyper_graph_family() {
     assert(!f4.sample(edge_count, 0.93).is_core_empty());
 }
 
-void test_binary_search_for_alpha() {
+void test_threshold_for_alpha() {
     const uint32_t edge_count = 100000;
-    float epsilon = 1e-6;
 
     HyperGraphFamily f1({3}, {1});
-    assert(f1.binary_search(epsilon) > 0.81);
-    assert(f1.binary_search(epsilon) < 0.83);
+    assert(f1.threshold(edge_count) > 0.81);
+    assert(f1.threshold(edge_count) < 0.83);
 
 
     HyperGraphFamily f2({4}, {1});
-    assert(f2.binary_search(epsilon) > 0.76);
-    assert(f2.binary_search(epsilon) < 0.78);
+    assert(f2.threshold(edge_count) > 0.76);
+    assert(f2.threshold(edge_count) < 0.78);
 
 
     HyperGraphFamily f3({5}, {1});
-    assert(f3.binary_search(epsilon) > 0.69);
-    assert(f3.binary_search(epsilon) < 0.71);
+    assert(f3.threshold(edge_count) > 0.69);
+    assert(f3.threshold(edge_count) < 0.71);
 
     HyperGraphFamily f4({3, 21}, {89, 11});
-    assert(f4.binary_search(epsilon) > 0.91);
-    assert(f4.binary_search(epsilon) < 0.93);
+    assert(f4.threshold(edge_count) > 0.91);
+    assert(f4.threshold(edge_count) < 0.93);
 }
 
 void producer(MessageQueue<HyperGraphFamily> &queue, threadInfo& thread) {
@@ -81,51 +80,51 @@ void consumer(MessageQueue<HyperGraphFamily> &queue, threadInfo& thread) {
     }
 }
 
-void test_message_queue() {
-    MessageQueue<HyperGraphFamily> queue;
+// void test_message_queue() {
+//     MessageQueue<HyperGraphFamily> queue;
 
-    std::vector<threadInfo> producer_threads;
-    std::vector<threadInfo> consumer_threads;
+//     std::vector<threadInfo> producer_threads;
+//     std::vector<threadInfo> consumer_threads;
 
-    for (int i = 0; i < 8; i++) {
-        threadInfo thread;
-        if (i % 2 == 0)
-            producer_threads.push_back(thread);
-        else
-            consumer_threads.push_back(thread);
-    }
+//     for (int i = 0; i < 8; i++) {
+//         threadInfo thread;
+//         if (i % 2 == 0)
+//             producer_threads.push_back(thread);
+//         else
+//             consumer_threads.push_back(thread);
+//     }
 
-    std::vector<std::thread> running_producers;
-    std::vector<std::thread> running_consumers;
+//     std::vector<std::thread> running_producers;
+//     std::vector<std::thread> running_consumers;
 
-    for (int i = 0; i < producer_threads.size(); i++) {
-        running_producers.push_back(std::thread(producer, std::ref(queue), std::ref(producer_threads[i])));
-    }
+//     for (int i = 0; i < producer_threads.size(); i++) {
+//         running_producers.push_back(std::thread(producer, std::ref(queue), std::ref(producer_threads[i])));
+//     }
 
-    for (int i = 0; i < consumer_threads.size(); i++) {
-        running_consumers.push_back(std::thread(consumer, std::ref(queue), std::ref(consumer_threads[i])));
-    }
+//     for (int i = 0; i < consumer_threads.size(); i++) {
+//         running_consumers.push_back(std::thread(consumer, std::ref(queue), std::ref(consumer_threads[i])));
+//     }
 
-    for (auto &thread : running_producers) {
-        if (thread.joinable()) {
-            thread.join();
-        }
-    }
+//     for (auto &thread : running_producers) {
+//         if (thread.joinable()) {
+//             thread.join();
+//         }
+//     }
 
-    for (auto &thread : running_consumers) {
-        if (thread.joinable()) {
-            thread.join();
-        }
-    }
-}
+//     for (auto &thread : running_consumers) {
+//         if (thread.joinable()) {
+//             thread.join();
+//         }
+//     }
+// }
 
 
 
 
 int main() {
-//    test_hyper_graph();
-//    test_hyper_graph_family();
-//    test_binary_search_for_alpha();
-    test_message_queue();
+    test_hyper_graph();
+    test_hyper_graph_family();
+    test_threshold_for_alpha();
+    // test_message_queue();
     std::cout << "OK" << std::endl;
 }

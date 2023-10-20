@@ -62,7 +62,7 @@ HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor)
 }
 
 // epsilon = 1e-6 = 0.000006 etc.
-float HyperGraphFamily::threshold(uint32_t edge_count, double left, double right, double epsilon) {
+double HyperGraphFamily::threshold(uint32_t edge_count, double left, double right, double epsilon) {
 
     // floating point precision fix
     while (right-left > epsilon) {
@@ -80,4 +80,16 @@ float HyperGraphFamily::threshold(uint32_t edge_count, double left, double right
 
     //return the midpoint, left or right doesn't matter
     return left;
+}
+
+double HyperGraphFamily::average_edge_size() const {
+    uint32_t edge_weighed_size_sum = 0;
+    for (uint32_t i = 0; i < edge_sizes_.size(); ++i)
+        edge_weighed_size_sum += edge_sizes_[i] * edge_weights_[i];
+    
+    uint32_t edge_weight_sum = 0;
+    for (const auto edge_weight : edge_weights_)
+        edge_weight_sum += edge_weight;
+
+    return static_cast<double>(edge_weighed_size_sum) / static_cast<double>(edge_weight_sum);
 }

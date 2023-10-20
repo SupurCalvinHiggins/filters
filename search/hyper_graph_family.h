@@ -16,5 +16,6 @@ public:
 
     HyperGraph sample(uint32_t edge_count, double load_factor);
 
-    float threshold(uint32_t edge_count, double left = 0.0, double right = 1.0, double epsilon = 0.0001);
+    double threshold(uint32_t edge_count, double left = 0.0, double right = 1.0, double epsilon = 0.0001);
+    double average_edge_size() const;
 };
