@@ -60,9 +60,17 @@ void test_threshold_for_alpha() {
     assert(f4.threshold(edge_count) < 0.93);
 }
 
+<<<<<<< HEAD
 void test_average_edge_size() {
     HyperGraphFamily f1({3}, {1});
     assert(f1.average_edge_size() - 3.0 < 0.0001);
+=======
+void producer(MessageQueue<HyperGraphFamily> &queue, threadInfo& thread) {
+    while (!thread.finished) {
+        HyperGraphFamily f1({ static_cast<unsigned int>(rand() % 20)}, { static_cast<unsigned int>(rand() % 20)});
+        queue.push(std::move(f1));
+//        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Adjust the delay as needed
+>>>>>>> a92d0b2 (single producer many consumers + csv output)
 
     HyperGraphFamily f2({3}, {4});
     assert(f2.average_edge_size() - 3.0 < 0.0001);
@@ -80,8 +88,13 @@ void test_average_edge_size() {
 //     }
 // }
 
+<<<<<<< HEAD
 // void consumer(MessageQueue<HyperGraphFamily> &queue, threadInfo& thread) {
 //     while (!thread.finished) {
+=======
+        HyperGraphFamily family = std::move(familyOptional.value());
+//        std::cout << "alpha " << family.threshold(1e-6) << std::endl;
+>>>>>>> a92d0b2 (single producer many consumers + csv output)
 
 //         auto familyOptional = queue.pop();
 
@@ -131,11 +144,11 @@ void test_average_edge_size() {
 
 
 
-
-int main() {
-    test_hyper_graph();
-    test_hyper_graph_family();
-    test_threshold_for_alpha();
-    // test_message_queue();
-    std::cout << "OK" << std::endl;
-}
+//
+//int main() {
+//    test_hyper_graph();
+//    test_hyper_graph_family();
+//    test_threshold_for_alpha();
+//    // test_message_queue();
+//    std::cout << "OK" << std::endl;
+//}

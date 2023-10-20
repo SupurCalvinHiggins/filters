@@ -7,11 +7,13 @@
 
 class HyperGraphFamily {
 private:
+
+
+public:
     std::vector <uint32_t> edge_sizes_;
     std::vector <uint32_t> edge_weights_;
     uint32_t window_size_;
 
-public:
     HyperGraphFamily(std::vector <uint32_t> &&edge_sizes, std::vector <uint32_t> &&edge_weights, uint32_t window_size = 0);
 
     HyperGraph sample(uint32_t edge_count, double load_factor);

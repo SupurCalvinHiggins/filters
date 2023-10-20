@@ -13,6 +13,10 @@ private:
 public:
     void push(T&& msg);
     std::optional<T> pop();
+    size_t size() {
+        std::lock_guard lock(mutex_);
+        return q_.size();
+    }
 };
 
 #include "message_queue.tpp"
