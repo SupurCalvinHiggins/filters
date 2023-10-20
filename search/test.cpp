@@ -76,7 +76,7 @@ void consumer(MessageQueue<HyperGraphFamily> &queue, threadInfo& thread) {
         auto familyOptional = queue.pop();
 
         HyperGraphFamily family = std::move(familyOptional.value());
-        std::cout << "alpha " << family.binary_search(1e-6) << std::endl;
+        std::cout << "alpha " << family.threshold(1e-6) << std::endl;
 
     }
 }
