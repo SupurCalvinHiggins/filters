@@ -1,4 +1,6 @@
 #include <iostream>
+#include <random>
+#include <cassert>
 
 #include "hyper_graph.h"
 #include "hyper_graph_family.h"
@@ -9,21 +11,34 @@
 // need to implement coupling
 // need to seperate threshold from hypergraphfamily and make into template
 
+HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_t max_edge_size, uint32_t max_edge_count, uint32_t max_weight, uint32_t seed) {
+    assert(max_edge_size >= 3);
+    assert(max_average_edge_size >= 3.0);
+    assert(max_edge_count >= 1);
+
+    std::mt19937 rng(seed);
+    std::uniform_int_distribution<uint32_t> edge_size_dist(3, max_edge_size);
+    std::uniform_int_distribution<uint32_t> edge_count_dist(1, max_edge_count);
+
+    while (1) {
+        auto edge_size = edge_size_dist(rng);
+
+        std::vector<uint32_t> edge_sizes;
+        for (uint32_t i = 0; i < edge_size; ++i)
+            edge_sizes.push_back(edge_count_dist(rng));
+            
+        std::vector<uint32_t> edge_weights;
+        for (uint32_t i = 0; i < edge_size; ++i)
+            edge_weights.push_back(edge_size_dist(rng));
+
+        HyperGraphFamily f(std::move(edge_sizes), std::move(edge_weights));
+
+        if (f.average_edge_size() < max_average_edge_size)
+            return f;
+    }
+}
+
 int main() {
     // terrible code that doesnt really work at all :)
-    for (int e1 = 3; e1 < 7; ++e1) {
-        for (int e2 = e1 + 1; e2 < 7; ++e2) {
-            for (int e3 = e2 + 1; e3 < 7; ++e3) {
-                for (int p1 = 1; p1 <= 100; ++p1) {
-                    for (int p2 = 1; p2 <= 100 - p1; ++p2) {
-                        double ehash =  (double) (e1 * p1) / (double)(p1 + p2) + (double) (e2 * p2) / (double)(p1 + p2);
-                        if (ehash > 4) continue;
-                        HyperGraphFamily f({e1, e2, e3}, {p1, p2, p2});
-                        if (!f.sample(1000, 0.85).is_core_empty()) continue;
-                        std::cout << ehash << " " << f.threshold(100000, 0.0, 1.0) << " " << e1 << " " << e2 << " " << std::endl;
-                    }
-                }
-            }
-        }
-    }
+    auto f = random_hyper_graph_family(5.0, 30, 7, 10, 42);
 }
