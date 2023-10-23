@@ -38,7 +38,69 @@ HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_
     }
 }
 
+void producer(MessageQueue<HyperGraphFamily> &queue) {
+    while (true) {
+        if (queue.size() < 50) {
+            HyperGraphFamily f1({3, 21}, {89, 11});
+            queue.push(std::move(f1));
+        } else {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Adjust the delay as needed
+        }
+    }
+}
+
+void consumer(MessageQueue<HyperGraphFamily> &queue, const std::string &file_number, int max) {
+    std::ofstream outfile("data_" + file_number + ".txt");
+
+    while (true) {
+        auto familyOptional = queue.pop();
+
+        if (familyOptional) {
+            HyperGraphFamily family = std::move(familyOptional.value());
+
+            for (int i = 0; i < family.edge_sizes_.size(); ++i) {
+                outfile << family.edge_sizes_[i] << ",";
+            }
+
+            for (int i = 0; i < max - family.edge_sizes_.size(); ++i) {
+                outfile << ",";
+            }
+
+            for (int i = 0; i < family.edge_weights_.size(); ++i) {
+                outfile << family.edge_weights_[i] << ",";
+            }
+
+            for (int i = 0; i < max - family.edge_weights_.size(); ++i) {
+                outfile << ",";
+            }
+
+            outfile << family.window_size_ << ",";
+
+            auto family_threshold = family.threshold(100000);
+            outfile << family_threshold << std::endl;
+        }
+    }
+    outfile.close();
+}
+
 int main() {
     // terrible code that doesnt really work at all :)
     auto f = random_hyper_graph_family(5.0, 30, 7, 10, 42);
+
+    MessageQueue<HyperGraphFamily> queue;
+    std::thread single_producer_thread = std::thread(producer, std::ref(queue));
+
+    std::vector<std::thread> multiple_consumer_thread;
+
+    uint32_t consumer_count = 5;
+    int max = 3;
+    for (int i = 0; i < consumer_count; i++) {
+        multiple_consumer_thread.push_back(std::thread(consumer, std::ref(queue), std::string(std::to_string(i)), max));
+    }
+
+    single_producer_thread.join();
+
+    for (auto &thread : multiple_consumer_thread) {
+        thread.join();
+    }
 }
