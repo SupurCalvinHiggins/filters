@@ -1,7 +1,8 @@
 #include <iostream>
 #include <random>
 #include <cassert>
-
+#include <thread>
+#include <fstream>
 #include "hyper_graph.h"
 #include "hyper_graph_family.h"
 #include "message_queue.h"
@@ -26,7 +27,7 @@ HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_
         std::vector<uint32_t> edge_sizes;
         for (uint32_t i = 0; i < edge_size; ++i)
             edge_sizes.push_back(edge_count_dist(rng));
-            
+
         std::vector<uint32_t> edge_weights;
         for (uint32_t i = 0; i < edge_size; ++i)
             edge_weights.push_back(edge_size_dist(rng));
