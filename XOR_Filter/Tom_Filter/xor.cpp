@@ -1,4 +1,3 @@
-#include "xor.h"
 #include "hashutil.h"
 #include <set>
 #include <queue>
