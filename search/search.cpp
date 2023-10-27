@@ -4,9 +4,12 @@
 #include <thread>
 #include <fstream>
 #include <functional>
+#include <atomic>
 #include "hyper_graph.h"
 #include "hyper_graph_family.h"
 #include "message_queue.h"
+
+std::atomic<bool> global_flag(true);
 
 // need a function that yields all combinations of edges up to threshold
 // need a function that yields all combinations of probs
@@ -41,7 +44,7 @@ HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_
 }
 
 void producer(MessageQueue<HyperGraphFamily> &queue, std::function<HyperGraphFamily()> random_hyper_graph_family_func) {
-    while (1) {
+    while (global_flag) {
         if (queue.size() > 50) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
@@ -54,7 +57,7 @@ void producer(MessageQueue<HyperGraphFamily> &queue, std::function<HyperGraphFam
 void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_edge_count) {
     std::ofstream os(std::to_string(id) + ".csv");
 
-    while (1) {
+    while (global_flag) {
         const auto optional_family = queue.pop();
 
         if (optional_family) {
@@ -122,7 +125,7 @@ int main() {
     // Join consumers.
     for (auto& thread : consumers)
         thread.join();
-    
+
     // Join producers.
     for (auto& thread : producers)
         thread.join();
