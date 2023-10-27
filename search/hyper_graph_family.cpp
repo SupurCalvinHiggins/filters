@@ -13,7 +13,7 @@ HyperGraphFamily::HyperGraphFamily(
     assert(edge_sizes_.size() == edge_weights_.size());
 }
 
-HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor)
+HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor) const
 {
     assert(edge_count > 0);
     assert(load_factor < 1);
@@ -62,7 +62,7 @@ HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor)
 }
 
 // epsilon = 1e-6 = 0.000006 etc.
-double HyperGraphFamily::threshold(uint32_t edge_count, double left, double right, double epsilon) {
+double HyperGraphFamily::threshold(uint32_t edge_count, double left, double right, double epsilon) const {
 
     // floating point precision fix
     while (right-left > epsilon) {
