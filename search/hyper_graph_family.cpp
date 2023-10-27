@@ -2,10 +2,11 @@
 #include <random>
 #include "hyper_graph_family.h"
 #include <algorithm>
+#include <iostream>
 
 HyperGraphFamily::HyperGraphFamily(
-    std::vector<uint32_t> &&edge_sizes,
-    std::vector<uint32_t> &&edge_weights,
+    const std::vector<uint32_t>& edge_sizes,
+    const std::vector<uint32_t>& edge_weights,
     uint32_t window_size
 ) : edge_sizes_(edge_sizes), edge_weights_(edge_weights), window_size_(window_size) {
     assert(edge_sizes_.size() > 0);
@@ -46,19 +47,23 @@ HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor) con
         std::discrete_distribution<uint32_t> edge_sizes_idx_dist(edge_weights_.begin(), edge_weights_.end());
         std::uniform_int_distribution<uint32_t> window_idx_dist(0, vertex_count - 1 - window_size_);
 
+        std::vector<uint32_t> offsets;
+        for (uint32_t i = 0; i < window_size_; ++i)
+            offsets.push_back(i);
+
         // Build the hypergraph edges.
         for (auto &edge : edges)
         {
             const auto edge_size = edge_sizes_[edge_sizes_idx_dist(rng)];
             edge.resize(edge_size);
             const auto window_idx = window_idx_dist(rng);
-            std::uniform_int_distribution<uint32_t> vertex_dist(window_idx, window_idx + window_size_ - 1);
-            for (auto &vertex : edge)
-                vertex = vertex_dist(rng);
+            std::shuffle(offsets.begin(), offsets.end(), rng);
+            for (uint32_t i = 0; i < edge.size(); ++i) {
+                edge[i] = window_idx + offsets[i];
+            }
         }
     }
-
-    return HyperGraph(vertex_count, std::move(edges));
+    return HyperGraph(vertex_count, edges);
 }
 
 // epsilon = 1e-6 = 0.000006 etc.

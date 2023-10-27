@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cassert>
+#include <iostream>
 
 #include "hyper_graph.h"
 
@@ -10,7 +11,7 @@
  */
 HyperGraph::HyperGraph(
     uint32_t vertex_count,
-    std::vector<std::vector<uint32_t>> &&edges) : vertex_to_edges_(vertex_count), edge_to_vertices_(edges), is_core_empty_(std::nullopt)
+    const std::vector<std::vector<uint32_t>>& edges) : vertex_to_edges_(vertex_count), edge_to_vertices_(edges), is_core_empty_(std::nullopt)
 {
     // Ensure the input is valid.
     assert(vertex_to_edges_.size() > 0);

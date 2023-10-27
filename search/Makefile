@@ -8,7 +8,6 @@ run: search
 
 test: test.cpp hyper_graph.cpp hyper_graph_family.cpp
 	$(CXX) $(CXXFLAGS) test.cpp hyper_graph.cpp hyper_graph_family.cpp -o test
-	./test
 
 search: search.cpp hyper_graph.cpp hyper_graph_family.cpp
 	$(CXX) $(CXXFLAGS) search.cpp hyper_graph.cpp hyper_graph_family.cpp -o search

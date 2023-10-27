@@ -13,6 +13,6 @@ private:
 
 public:
 
-    HyperGraph(uint32_t vertex_count, std::vector<std::vector<uint32_t>> &&edges);
+    HyperGraph(uint32_t vertex_count, const std::vector<std::vector<uint32_t>>& edges);
     bool is_core_empty();
 };

@@ -1,10 +1,11 @@
 #include <iostream>
 #include <cassert>
+#include <cmath>
+#include <vector>
 
 #include "hyper_graph.h"
 #include "hyper_graph_family.h"
 #include "message_queue.h"
-#include <thread>
 
 void test_hyper_graph() {
     HyperGraph g1(5, {{0, 0, 4}, {4, 1, 1}});
@@ -32,9 +33,14 @@ void test_hyper_graph_family() {
     HyperGraphFamily f4({3, 21}, {89, 11});
     assert(f4.sample(edge_count, 0.91).is_core_empty());
     assert(!f4.sample(edge_count, 0.93).is_core_empty());
+
+    HyperGraphFamily f5({3}, {1}, 3);
+    std::cout << f5.sample(27, 0.9).is_core_empty() << std::endl;
+    assert(f5.sample(edge_count, 0.91).is_core_empty());
+    assert(!f5.sample(edge_count, 0.93).is_core_empty());
 }
 
-void test_threshold_for_alpha() {
+void test_threshold() {
     const uint32_t edge_count = 100000;
 
     HyperGraphFamily f1({3}, {1});
@@ -70,6 +76,6 @@ void test_average_edge_size() {
 int main() {
     test_hyper_graph();
     test_hyper_graph_family();
-    test_threshold_for_alpha();
+    test_threshold();
     std::cout << "OK" << std::endl;
 }
