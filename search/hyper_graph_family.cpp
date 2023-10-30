@@ -14,7 +14,7 @@ HyperGraphFamily::HyperGraphFamily(
     assert(edge_sizes_.size() == edge_weights_.size());
 }
 
-HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor) const
+HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor, std::mt19937 rng) const
 {
     assert(edge_count > 0);
     assert(load_factor < 1);
@@ -26,8 +26,6 @@ HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor) con
     // No coupling.
     if (window_size_ == 0) {
 
-        // Set up random number generation.
-        std::mt19937 rng(0);
         std::discrete_distribution<uint32_t> edge_sizes_idx_dist(edge_weights_.begin(), edge_weights_.end());
         std::uniform_int_distribution<uint32_t> vertex_dist(0, vertex_count - 1);
 
@@ -42,8 +40,7 @@ HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor) con
 
     // With coupling.
     } else {
-        // Set up random number generation.
-        std::mt19937 rng(0);
+
         std::discrete_distribution<uint32_t> edge_sizes_idx_dist(edge_weights_.begin(), edge_weights_.end());
         std::uniform_int_distribution<uint32_t> window_idx_dist(0, vertex_count - 1 - window_size_);
 
@@ -67,14 +64,14 @@ HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor) con
 }
 
 // epsilon = 1e-6 = 0.000006 etc.
-double HyperGraphFamily::threshold(uint32_t edge_count, double left, double right, double epsilon) const {
+double HyperGraphFamily::threshold(uint32_t edge_count, double left, double right, double epsilon, std::mt19937 rng) const {
 
     // floating point precision fix
     while (right-left > epsilon) {
         float mid = left + (right - left) / 2;
 
         // if no we can move left up
-        if (sample(edge_count, mid).is_core_empty()) {
+        if (sample(edge_count, mid, rng).is_core_empty()) {
             left = mid;
         }
         // otherwise if yes we can move right down

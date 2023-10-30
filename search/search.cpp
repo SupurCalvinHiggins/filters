@@ -54,7 +54,7 @@ void producer(MessageQueue<HyperGraphFamily> &queue, std::function<HyperGraphFam
     }
 }
 
-void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_edge_count) {
+void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_edge_count, std::mt19937 rng) {
     std::ofstream os(std::to_string(id) + ".csv");
 
     while (global_flag) {
@@ -77,12 +77,12 @@ void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_e
 
             os << family.window_size_ << ",";
 
-            if (!family.sample(100000, 0.92).is_core_empty()) {
+            if (!family.sample(100000, 0.92, rng).is_core_empty()) {
                 os << std::endl;
                 continue;
             }
 
-            const auto threshold = family.threshold(100000);
+            const auto threshold = family.threshold(100000,0.0,1.0, 0.0001,rng);
             os << threshold << std::endl;
         }
     }

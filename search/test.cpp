@@ -17,49 +17,51 @@ void test_hyper_graph() {
 
 void test_hyper_graph_family() {
     const uint32_t edge_count = 100000;
+    std::mt19937 rng(0);
 
     HyperGraphFamily f1({3}, {1});
-    assert(f1.sample(edge_count, 0.81).is_core_empty());
-    assert(!f1.sample(edge_count, 0.83).is_core_empty());
+    assert(f1.sample(edge_count, 0.81,rng).is_core_empty());
+    assert(!f1.sample(edge_count, 0.83,rng).is_core_empty());
 
     HyperGraphFamily f2({4}, {1});
-    assert(f2.sample(edge_count, 0.76).is_core_empty());
-    assert(!f2.sample(edge_count, 0.78).is_core_empty());
+    assert(f2.sample(edge_count, 0.76,rng).is_core_empty());
+    assert(!f2.sample(edge_count, 0.78,rng).is_core_empty());
 
     HyperGraphFamily f3({5}, {1});
-    assert(f3.sample(edge_count, 0.69).is_core_empty());
-    assert(!f3.sample(edge_count, 0.71).is_core_empty());
+    assert(f3.sample(edge_count, 0.69,rng).is_core_empty());
+    assert(!f3.sample(edge_count, 0.71,rng).is_core_empty());
 
     HyperGraphFamily f4({3, 21}, {89, 11});
-    assert(f4.sample(edge_count, 0.91).is_core_empty());
-    assert(!f4.sample(edge_count, 0.93).is_core_empty());
+    assert(f4.sample(edge_count, 0.91,rng).is_core_empty());
+    assert(!f4.sample(edge_count, 0.93,rng).is_core_empty());
 
     HyperGraphFamily f5({3}, {1}, 3);
-    std::cout << f5.sample(27, 0.9).is_core_empty() << std::endl;
-    assert(f5.sample(edge_count, 0.91).is_core_empty());
-    assert(!f5.sample(edge_count, 0.93).is_core_empty());
+    std::cout << f5.sample(27, 0.9,rng).is_core_empty() << std::endl;
+    assert(f5.sample(edge_count, 0.91,rng).is_core_empty());
+    assert(!f5.sample(edge_count, 0.93,rng).is_core_empty());
 }
 
 void test_threshold() {
     const uint32_t edge_count = 100000;
+    std::mt19937 rng(0);
 
     HyperGraphFamily f1({3}, {1});
-    assert(f1.threshold(edge_count) > 0.81);
+    assert(f1.threshold(edge_count,0.0,1.0, 0.0001,rng) > 0.81);
     assert(f1.threshold(edge_count) < 0.83);
 
 
     HyperGraphFamily f2({4}, {1});
-    assert(f2.threshold(edge_count) > 0.76);
-    assert(f2.threshold(edge_count) < 0.78);
+    assert(f2.threshold(edge_count, 0.0, 1.0, 0.0001,rng) > 0.76);
+    assert(f2.threshold(edge_count, 0.0,1.0, 0.0001,rng) < 0.78);
 
 
     HyperGraphFamily f3({5}, {1});
-    assert(f3.threshold(edge_count) > 0.69);
-    assert(f3.threshold(edge_count) < 0.71);
+    assert(f3.threshold(edge_count,0.0,1.0, 0.0001,rng) > 0.69);
+    assert(f3.threshold(edge_count,0.0,1.0, 0.0001,rng) < 0.71);
 
     HyperGraphFamily f4({3, 21}, {89, 11});
-    assert(f4.threshold(edge_count) > 0.91);
-    assert(f4.threshold(edge_count) < 0.93);
+    assert(f4.threshold(edge_count,0.0,1.0, 0.0001,rng) > 0.91);
+    assert(f4.threshold(edge_count,0.0,1.0, 0.0001,rng) < 0.93);
 }
 
 void test_average_edge_size() {
