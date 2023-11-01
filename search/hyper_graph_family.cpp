@@ -64,7 +64,7 @@ HyperGraph HyperGraphFamily::sample(uint32_t edge_count, double load_factor, std
 }
 
 // epsilon = 1e-6 = 0.000006 etc.
-double HyperGraphFamily::threshold(uint32_t edge_count, double left, double right, double epsilon, std::mt19937 rng) const {
+double HyperGraphFamily::threshold(uint32_t edge_count, std::mt19937 rng, double left, double right, double epsilon) const {
 
     // floating point precision fix
     while (right-left > epsilon) {

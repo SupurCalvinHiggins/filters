@@ -16,7 +16,7 @@ std::atomic<bool> global_flag(true);
 // need to implement coupling
 // need to seperate threshold from hypergraphfamily and make into template
 
-HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_t max_edge_count, uint32_t max_edge_size, uint32_t max_weight, std::mt19937& rng) {
+HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_t max_edge_count, uint32_t max_edge_size, uint32_t max_weight, std::mt19937 rng) {
     assert(max_average_edge_size >= 3.0);
     assert(max_edge_count >= 2);
     assert(max_edge_size >= 3);
@@ -54,9 +54,10 @@ void producer(MessageQueue<HyperGraphFamily> &queue, std::function<HyperGraphFam
     }
 }
 
-void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_edge_count, std::mt19937 rng) {
+void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_edge_count) {
     std::ofstream os(std::to_string(id) + ".csv");
-
+    std::mt19937 rng(0);
+    
     while (global_flag) {
         const auto optional_family = queue.pop();
 
@@ -82,7 +83,7 @@ void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_e
                 continue;
             }
 
-            const auto threshold = family.threshold(100000,0.0,1.0, 0.0001,rng);
+            const auto threshold = family.threshold(100000,rng,0.0,1.0, 0.0001);
             os << threshold << std::endl;
         }
     }

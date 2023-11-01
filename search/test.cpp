@@ -46,22 +46,22 @@ void test_threshold() {
     std::mt19937 rng(0);
 
     HyperGraphFamily f1({3}, {1});
-    assert(f1.threshold(edge_count,0.0,1.0, 0.0001,rng) > 0.81);
-    assert(f1.threshold(edge_count) < 0.83);
+    assert(f1.threshold(edge_count,rng,0.0,1.0, 0.0001) > 0.81);
+    assert(f1.threshold(edge_count,rng) < 0.83);
 
 
     HyperGraphFamily f2({4}, {1});
-    assert(f2.threshold(edge_count, 0.0, 1.0, 0.0001,rng) > 0.76);
-    assert(f2.threshold(edge_count, 0.0,1.0, 0.0001,rng) < 0.78);
+    assert(f2.threshold(edge_count, rng,0.0, 1.0, 0.0001) > 0.76);
+    assert(f2.threshold(edge_count, rng,0.0,1.0, 0.0001) < 0.78);
 
 
     HyperGraphFamily f3({5}, {1});
-    assert(f3.threshold(edge_count,0.0,1.0, 0.0001,rng) > 0.69);
-    assert(f3.threshold(edge_count,0.0,1.0, 0.0001,rng) < 0.71);
+    assert(f3.threshold(edge_count,rng,0.0,1.0, 0.0001) > 0.69);
+    assert(f3.threshold(edge_count,rng,0.0,1.0, 0.0001) < 0.71);
 
     HyperGraphFamily f4({3, 21}, {89, 11});
-    assert(f4.threshold(edge_count,0.0,1.0, 0.0001,rng) > 0.91);
-    assert(f4.threshold(edge_count,0.0,1.0, 0.0001,rng) < 0.93);
+    assert(f4.threshold(edge_count,rng,0.0,1.0, 0.0001) > 0.91);
+    assert(f4.threshold(edge_count,rng,0.0,1.0, 0.0001) < 0.93);
 }
 
 void test_average_edge_size() {
