@@ -7,14 +7,14 @@
 template <typename T>
 class MessageQueue {
 private:
-    std::queue<T> q_;
-    std::mutex mutex_;
+    std::queue<T> m_q;
+    std::mutex m_mutex;
 
 public:
     void push(T&& msg);
     std::optional<T> pop();
     int size() {
-        return q_.size();
+        return m_q.size();
     }
 };
 
