@@ -43,7 +43,7 @@ void consumer(uint32_t id, MessageQueue<CoupledHyperGraphFamily> &queue, uint32_
             }
 
             // TODO: Change me.
-            os << 1 << ",";
+            os << family.average_edge_size() << ",";
 
             if (!family.sample(0.87, rng).is_core_empty()) {
                 os << std::endl;
