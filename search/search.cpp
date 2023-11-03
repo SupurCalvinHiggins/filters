@@ -4,16 +4,19 @@
 #include <thread>
 #include <fstream>
 #include <functional>
+#include <atomic>
 #include "hyper_graph.h"
 #include "hyper_graph_family.h"
 #include "message_queue.h"
+
+std::atomic<bool> global_flag(true);
 
 // need a function that yields all combinations of edges up to threshold
 // need a function that yields all combinations of probs
 // need to implement coupling
 // need to seperate threshold from hypergraphfamily and make into template
 
-HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_t max_edge_count, uint32_t max_edge_size, uint32_t max_weight, std::mt19937& rng) {
+HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_t max_edge_count, uint32_t max_edge_size, uint32_t max_weight, std::mt19937 rng) {
     assert(max_average_edge_size >= 3.0);
     assert(max_edge_count >= 2);
     assert(max_edge_size >= 3);
@@ -41,7 +44,7 @@ HyperGraphFamily random_hyper_graph_family(double max_average_edge_size, uint32_
 }
 
 void producer(MessageQueue<HyperGraphFamily> &queue, std::function<HyperGraphFamily()> random_hyper_graph_family_func) {
-    while (1) {
+    while (global_flag) {
         if (queue.size() > 50) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
@@ -53,8 +56,9 @@ void producer(MessageQueue<HyperGraphFamily> &queue, std::function<HyperGraphFam
 
 void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_edge_count) {
     std::ofstream os(std::to_string(id) + ".csv");
-
-    while (1) {
+    std::mt19937 rng(0);
+    
+    while (global_flag) {
         const auto optional_family = queue.pop();
 
         if (optional_family) {
@@ -72,14 +76,14 @@ void consumer(uint32_t id, MessageQueue<HyperGraphFamily> &queue, uint32_t max_e
                 os << ",";
             }
 
-            os << family.window_size_ << ",";
+            os << family.is_coupled_ << ",";
 
-            if (!family.sample(100000, 0.92).is_core_empty()) {
+            if (!family.sample(100000, 0.92, rng).is_core_empty()) {
                 os << std::endl;
                 continue;
             }
 
-            const auto threshold = family.threshold(100000);
+            const auto threshold = family.threshold(100000,rng,0.0,1.0, 0.0001);
             os << threshold << std::endl;
         }
     }
@@ -122,7 +126,7 @@ int main() {
     // Join consumers.
     for (auto& thread : consumers)
         thread.join();
-    
+
     // Join producers.
     for (auto& thread : producers)
         thread.join();
