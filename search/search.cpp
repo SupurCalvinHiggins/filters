@@ -51,10 +51,10 @@ void consumer(uint32_t id, MessageQueue<CoupledHyperGraphFamily> &queue, uint32_
             // TODO: Change me.
             os << family.average_edge_size() << ",";
 
-            if (!family.sample(0.89, rng).is_core_empty()) {
-                os << std::endl;
-                continue;
-            }
+            // if (!family.sample(0.89, rng).is_core_empty()) {
+            //     os << std::endl;
+            //     continue;
+            // }
 
             const auto threshold = is_core_empty_threshold(family, rng, 0.89, 1.0);
             os << threshold << std::endl;
