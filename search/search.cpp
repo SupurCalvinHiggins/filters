@@ -19,7 +19,6 @@ void producer(MessageQueue<CoupledHyperGraphFamily> &queue, std::function<Couple
     while (global_flag) {
         if (queue.size() > 100) {
             // TODO: Remove. Not thread safe.
-            std::cout << "producer sleeping" << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
