@@ -18,6 +18,8 @@ std::atomic<bool> global_flag{ true };
 void producer(MessageQueue<CoupledHyperGraphFamily> &queue, std::function<CoupledHyperGraphFamily()> random_hyper_graph_family_func) {
     while (global_flag) {
         if (queue.size() > 100) {
+            // TODO: Remove. Not thread safe.
+            std::cout << "producer sleeping" << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
