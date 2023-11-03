@@ -211,6 +211,9 @@ CoupledHyperGraphFamily random_family(double max_average_edge_size, uint32_t max
 
         CoupledHyperGraphFamily family(std::move(edge_sizes), std::move(edge_weights));
 
+        if (family.average_edge_size() - 3.0 < 0.000001)
+            continue;
+
         if (family.average_edge_size() < max_average_edge_size)
             return family;
     }
