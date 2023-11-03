@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -pedantic -std=c++2a -g -O3
+CXXFLAGS = -Wall -Wextra -pedantic -lpthread -std=c++2a -g -O3
 
 all: test search
 
@@ -16,4 +16,3 @@ search: search.cpp
 clean:
 	rm -f search
 	rm -f test
-	rm -f *.csv
