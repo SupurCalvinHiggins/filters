@@ -107,17 +107,16 @@ public:
 
 class CoupledHyperGraphFamily {
 public:
-    const uint32_t edge_count = 1000000;
-
-public:
     const std::vector<uint32_t> edge_sizes;
     const std::vector<uint32_t> edge_weights;
+    const uint32_t edge_count;
 
 public:
     CoupledHyperGraphFamily(
         std::vector<uint32_t>&& edge_sizes,
-        std::vector<uint32_t>&& edge_weights
-    ) : edge_sizes(edge_sizes), edge_weights(edge_weights) {
+        std::vector<uint32_t>&& edge_weights,
+        uint32_t edge_count = 1000000
+    ) : edge_sizes(edge_sizes), edge_weights(edge_weights), edge_count(edge_count) {
         assert(edge_sizes.size() > 0);
         assert(edge_weights.size() > 0);
         assert(edge_sizes.size() == edge_weights.size());
