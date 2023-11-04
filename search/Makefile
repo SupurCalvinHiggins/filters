@@ -14,7 +14,6 @@ search: search.cpp hyper.h
 
 example: example.cpp hyper.h
 	$(CXX) $(CXXFLAGS) example.cpp -o example
-	./example
 
 clean:
 	rm -f search
