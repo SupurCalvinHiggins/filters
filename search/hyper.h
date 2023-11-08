@@ -2,6 +2,7 @@
 #include <cassert>
 #include <optional>
 #include <queue>
+#include <algorithm>
 
 class HyperGraph {
 private:
