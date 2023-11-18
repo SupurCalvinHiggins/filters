@@ -15,7 +15,7 @@ center_x = df[10].mean()
 center_y = df[11].mean()
 
 # Calculate the slope and intercept for the line passing through the center of the data
-slope = (0.938 - 0.883) / (df[10].max() - df[10].min())
+slope = (0.930 - 0.883) / (df[10].max() - df[10].min())
 intercept = center_y - slope * center_x
 
 # Calculate y values for the red line based on the x values
